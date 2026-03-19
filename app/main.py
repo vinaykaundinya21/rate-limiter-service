@@ -1,12 +1,21 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends
 from prometheus_fastapi_instrumentator import Instrumentator
 from prometheus_client import Counter, Gauge
+from sqlalchemy.orm import Session
 from app.algorithms.token_bucket import is_allowed_token_bucket
 from app.algorithms.sliding_window import is_allowed_sliding_window
 from app.algorithms.fixed_window import is_allowed_fixed_window
 from app.redis_client import get_redis, is_redis_available
+from app.db.database import get_db, engine, Base
+from app.models.user import User
+from app.models.api_key import APIKey
+from app.auth.routes import router as auth_router
 
-app = FastAPI(title="Rate Limiter Service")
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="RateLimiter Pro")
+
+app.include_router(auth_router)
 
 requests_allowed = Counter(
     "rate_limiter_requests_allowed_total",
@@ -24,6 +33,15 @@ redis_health = Gauge(
 )
 
 Instrumentator().instrument(app).expose(app)
+
+def get_tenant(api_key: str, db: Session = Depends(get_db)):
+    key = db.query(APIKey).filter(
+        APIKey.key == api_key,
+        APIKey.is_active == True
+    ).first()
+    if not key:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+    return key
 
 def check_limit(algorithm_fn, client_id, algorithm_name, *args):
     redis = get_redis()
@@ -47,7 +65,7 @@ def check_limit(algorithm_fn, client_id, algorithm_name, *args):
 
 @app.get("/")
 def root():
-    return {"message": "Rate Limiter Service is running"}
+    return {"message": "RateLimiter Pro is running"}
 
 @app.get("/health")
 def health():
@@ -59,13 +77,31 @@ def health():
     }
 
 @app.post("/check-limit/token-bucket")
-def check_token_bucket(client_id: str, capacity: int = 10, refill_rate: float = 1.0):
-    return check_limit(is_allowed_token_bucket, client_id, "token_bucket", capacity, refill_rate)
+def check_token_bucket(
+    client_id: str,
+    capacity: int = 10,
+    refill_rate: float = 1.0,
+    tenant: APIKey = Depends(get_tenant)
+):
+    scoped_client = f"{tenant.user_id}:{client_id}"
+    return check_limit(is_allowed_token_bucket, scoped_client, "token_bucket", capacity, refill_rate)
 
 @app.post("/check-limit/sliding-window")
-def check_sliding_window(client_id: str, limit: int = 10, window_seconds: int = 60):
-    return check_limit(is_allowed_sliding_window, client_id, "sliding_window", limit, window_seconds)
+def check_sliding_window(
+    client_id: str,
+    limit: int = 10,
+    window_seconds: int = 60,
+    tenant: APIKey = Depends(get_tenant)
+):
+    scoped_client = f"{tenant.user_id}:{client_id}"
+    return check_limit(is_allowed_sliding_window, scoped_client, "sliding_window", limit, window_seconds)
 
 @app.post("/check-limit/fixed-window")
-def check_fixed_window(client_id: str, limit: int = 10, window_seconds: int = 60):
-    return check_limit(is_allowed_fixed_window, client_id, "fixed_window", limit, window_seconds)
+def check_fixed_window(
+    client_id: str,
+    limit: int = 10,
+    window_seconds: int = 60,
+    tenant: APIKey = Depends(get_tenant)
+):
+    scoped_client = f"{tenant.user_id}:{client_id}"
+    return check_limit(is_allowed_fixed_window, scoped_client, "fixed_window", limit, window_seconds)
