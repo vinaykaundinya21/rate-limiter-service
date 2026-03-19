@@ -88,6 +88,21 @@ Client Request → FastAPI → Algorithm (Token Bucket / Sliding Window / Fixed 
 ```
 ```
 
+
+## Load Test Results
+
+Tested with 50 concurrent users via Locust:
+
+| Metric | Result |
+|---|---|
+| Throughput | 161 requests/sec |
+| Median response time | 5ms |
+| 99th percentile | 18ms |
+| Total requests | 15,653 |
+| Rate limited (429s) | 1,662 |
+```
+
+
 Hit **Cmd + S**. Then:
 ```
 git add .
