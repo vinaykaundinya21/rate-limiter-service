@@ -1,0 +1,19 @@
+Method,Name,Error,Occurrences
+POST,/check-limit/sliding-window?client_id=user_84&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_84&limit=100&window_seconds=60'),41
+POST,/check-limit/sliding-window?client_id=user_36&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_36&limit=100&window_seconds=60'),54
+POST,/check-limit/fixed-window?client_id=user_44&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/fixed-window?client_id=user_44&limit=100&window_seconds=60'),3
+POST,/check-limit/sliding-window?client_id=user_72&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_72&limit=100&window_seconds=60'),49
+POST,/check-limit/sliding-window?client_id=user_88&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_88&limit=100&window_seconds=60'),1
+POST,/check-limit/sliding-window?client_id=user_48&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_48&limit=100&window_seconds=60'),59
+POST,/check-limit/sliding-window?client_id=user_96&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_96&limit=100&window_seconds=60'),18
+POST,/check-limit/sliding-window?client_id=user_20&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_20&limit=100&window_seconds=60'),18
+POST,/check-limit/sliding-window?client_id=user_68&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_68&limit=100&window_seconds=60'),11
+POST,/check-limit/sliding-window?client_id=user_40&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_40&limit=100&window_seconds=60'),166
+POST,/check-limit/sliding-window?client_id=user_24&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_24&limit=100&window_seconds=60'),31
+POST,/check-limit/fixed-window?client_id=user_40&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/fixed-window?client_id=user_40&limit=100&window_seconds=60'),7
+POST,/check-limit/sliding-window?client_id=user_44&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_44&limit=100&window_seconds=60'),70
+POST,/check-limit/sliding-window?client_id=user_80&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_80&limit=100&window_seconds=60'),34
+POST,/check-limit/sliding-window?client_id=user_76&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_76&limit=100&window_seconds=60'),9
+POST,/check-limit/sliding-window?client_id=user_4&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_4&limit=100&window_seconds=60'),51
+POST,/check-limit/sliding-window?client_id=user_32&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_32&limit=100&window_seconds=60'),17
+POST,/check-limit/sliding-window?client_id=user_56&limit=100&window_seconds=60,HTTPError('429 Client Error: Too Many Requests for url: /check-limit/sliding-window?client_id=user_56&limit=100&window_seconds=60'),93
