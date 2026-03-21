@@ -102,6 +102,9 @@ Tested with 50 concurrent users via Locust:
 | Rate limited (429s) | 1,662 |
 ```
 
+🚀 **Live API:** https://rate-limiter-service-production.up.railway.app
+📚 **API Docs:** https://rate-limiter-service-production.up.railway.app/docs
+
 
 Hit **Cmd + S**. Then:
 ```
