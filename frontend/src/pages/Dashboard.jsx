@@ -1,21 +1,32 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getRules, createRule, deleteRule } from '../api'
+import { getRules, createRule, deleteRule, getAnalytics } from '../api'
 
 export default function Dashboard() {
   const [rules, setRules] = useState([])
+  const [analytics, setAnalytics] = useState(null)
   const [form, setForm] = useState({ client_id_pattern: '', algorithm: 'token_bucket', capacity: 10, refill_rate: 1.0, limit: 10, window_seconds: 60 })
   const [error, setError] = useState('')
   const apiKey = localStorage.getItem('api_key')
   const navigate = useNavigate()
 
-  useEffect(() => { fetchRules() }, [])
+  useEffect(() => {
+    fetchRules()
+    fetchAnalytics()
+  }, [])
 
   const fetchRules = async () => {
     try {
       const res = await getRules(apiKey)
       setRules(res.data)
     } catch (e) { setError('Failed to load rules') }
+  }
+
+  const fetchAnalytics = async () => {
+    try {
+      const res = await getAnalytics(apiKey)
+      setAnalytics(res.data)
+    } catch (e) { console.log('analytics error', e) }
   }
 
   const handleCreate = async () => {
@@ -46,6 +57,31 @@ export default function Dashboard() {
       <div style={cardStyle}>
         <h2 style={labelStyle}>Your API Key</h2>
         <code style={{ background: '#f3f4f6', padding: '10px 14px', borderRadius: '8px', display: 'block', fontSize: '13px', wordBreak: 'break-all' }}>{apiKey}</code>
+      </div>
+
+      <div style={cardStyle}>
+        <h2 style={labelStyle}>Usage Analytics</h2>
+        {analytics ? (
+          <>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '16px' }}>
+              <div style={{ background: '#f0fdf4', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                <p style={{ fontSize: '28px', fontWeight: '600', color: '#16a34a' }}>{analytics.total_requests}</p>
+                <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>Total Requests</p>
+              </div>
+              <div style={{ background: '#eff6ff', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                <p style={{ fontSize: '28px', fontWeight: '600', color: '#2563eb' }}>{analytics.allowed}</p>
+                <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>Allowed</p>
+              </div>
+              <div style={{ background: '#fef2f2', padding: '16px', borderRadius: '8px', textAlign: 'center' }}>
+                <p style={{ fontSize: '28px', fontWeight: '600', color: '#dc2626' }}>{analytics.blocked}</p>
+                <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '4px' }}>Blocked</p>
+              </div>
+            </div>
+            <p style={{ fontSize: '13px', color: '#6b7280' }}>Block rate: <strong>{analytics.block_rate}%</strong></p>
+          </>
+        ) : (
+          <p style={{ color: '#9ca3af', fontSize: '14px' }}>No requests yet. Make some API calls to see analytics.</p>
+        )}
       </div>
 
       <div style={cardStyle}>
