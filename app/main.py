@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 from prometheus_client import Counter, Gauge
 from sqlalchemy.orm import Session
@@ -14,6 +15,14 @@ from app.auth.rule_routes import router as rule_router
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="RateLimiter Pro")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth_router)
 app.include_router(rule_router)
